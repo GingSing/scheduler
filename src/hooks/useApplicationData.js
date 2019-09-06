@@ -60,16 +60,6 @@ export default function useApplicationData() {
   });
   const setDay = day => dispatch({ type: SET_DAY, day });
   const bookInterview = (id, interview) => {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-
     socket.send(JSON.stringify({ type: "SET_INTERVIEW", id, interview }));
 
     return axios.put(`/api/appointments/${id}`, {
@@ -83,7 +73,7 @@ export default function useApplicationData() {
   };
 
   useEffect(() => {
-    socket = new WebSocket("ws://localhost:8001");
+    socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
 
     Promise.all([
       axios.get(`/api/days`),

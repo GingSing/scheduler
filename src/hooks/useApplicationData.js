@@ -28,14 +28,14 @@ const reducer = (state, action) => {
     }
 
     case SET_SPOTS: {
-      const days = state.days.map(item => {
-        if (item.name === action.dayName) {
+      const days = state.days.map(day => {
+        if (day.name === action.dayName) {
           return {
-            ...item,
-            spots: item.spots + action.value
+            ...day,
+            spots: day.spots + action.value
           };
         }
-        return item;
+        return day;
       });
 
       return {
@@ -74,38 +74,39 @@ export default function useApplicationData() {
 
   useEffect(() => {
     socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
-
     Promise.all([
       axios.get(`/api/days`),
       axios.get(`/api/appointments`),
       axios.get(`/api/interviewers`)
-    ]).then(all => {
-      const [days, appointments, interviewers] = all;
-      dispatch({
-        type: SET_APPLICATION_DATA,
-        days: days.data,
-        appointments: appointments.data,
-        interviewers: interviewers.data
-      });
-      socket.onmessage = data => {
-        let { id, interview } = JSON.parse(data.data);
-        let newAppointment = {
-          ...appointments.data[id],
-          interview: { ...interview }
-        };
-
-        let newAppointments = {
-          ...appointments.data,
-          [id]: newAppointment
-        };
-        dispatch({ type: SET_INTERVIEW, appointments: newAppointments });
+    ])
+      .then(all => {
+        const [days, appointments, interviewers] = all;
         dispatch({
-          type: SET_SPOTS,
-          dayName: state.day,
-          value: interview ? -1 : 1
+          type: SET_APPLICATION_DATA,
+          days: days.data,
+          appointments: appointments.data,
+          interviewers: interviewers.data
         });
-      };
-    });
+        socket.onmessage = data => {
+          let { id, interview } = JSON.parse(data.data);
+          let newAppointment = {
+            ...appointments.data[id],
+            interview: { ...interview }
+          };
+
+          let newAppointments = {
+            ...appointments.data,
+            [id]: newAppointment
+          };
+          dispatch({ type: SET_INTERVIEW, appointments: newAppointments });
+          dispatch({
+            type: SET_SPOTS,
+            dayName: state.day,
+            value: interview ? -1 : 1
+          });
+        };
+      })
+      .catch(err => err);
 
     return () => {
       socket.close();

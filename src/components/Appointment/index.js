@@ -57,7 +57,7 @@ export default function Appointment(props) {
     transition(EDIT);
   };
   return (
-    <Fragment>
+    <article className="appointment" data-testid="appointment">
       <Header time={props.time} />
       {mode === EMPTY && (
         <Empty
@@ -107,7 +107,6 @@ export default function Appointment(props) {
           onClose={() => transition(SHOW)}
         />
       )}
-      <article className="appointment"></article>
-    </Fragment>
+    </article>
   );
 }

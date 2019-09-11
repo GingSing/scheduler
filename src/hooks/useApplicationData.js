@@ -39,6 +39,13 @@ export default function useApplicationData() {
       );
   };
 
+  const dispatchSpots = value => {
+    dispatch({
+      type: SET_SPOTS,
+      value
+    });
+  };
+
   useEffect(() => {
     //Initiates socket before everything so socket can be set on completion of promise
     socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
@@ -72,17 +79,9 @@ export default function useApplicationData() {
             (appointments.data[id].interview && interview) ||
             (!appointments.data[id].interview && !interview)
           ) {
-            dispatch({
-              type: SET_SPOTS,
-              dayName: state.day,
-              value: 0
-            });
+            dispatchSpots(0);
           } else {
-            dispatch({
-              type: SET_SPOTS,
-              dayName: state.day,
-              value: interview ? -1 : 1
-            });
+            dispatchSpots(interview ? -1 : 1);
           }
         };
       })

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import Header from "./Header";
 import Show from "./Show";
@@ -20,15 +20,19 @@ const EDIT = "EDIT";
 const ERROR_SAVE = "ERROR_SAVE";
 const ERROR_DELETE = "ERROR_DELETE";
 
+//Sets the view of the appointment depending on values being passed in
+
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
 
+  //Updates the transitions based on changes to the interview props
   useEffect(() => {
     props.interview ? transition(SHOW) : transition(EMPTY);
   }, [props.interview]);
 
+  //On save, the function will transition and use the bookInterview props to send a request to the server
   const save = (name, interviewer) => {
     const interview = {
       student: name,
@@ -56,6 +60,7 @@ export default function Appointment(props) {
   const edit = () => {
     transition(EDIT);
   };
+  //updates view based on mode
   return (
     <article className="appointment" data-testid="appointment">
       <Header time={props.time} />

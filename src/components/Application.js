@@ -13,14 +13,17 @@ import {
 
 import useApplicationData from "../hooks/useApplicationData";
 
-export default function Application(props) {
+export default function Application() {
+  //pulls functions from useApplicationData
   const {
     state,
     setDay,
     bookInterview,
     cancelInterview
   } = useApplicationData();
+  //Gets interviewers for the current day
   const interviewers = getInterviewersForDay(state, state.day);
+  //Gets appointments for current day and pushes an appointment object for every appointment
   const appointments = getAppointmentsForDay(state, state.day).map(
     appointment => {
       return (

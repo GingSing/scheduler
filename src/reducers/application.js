@@ -23,6 +23,7 @@ export default function reducer(state, action) {
     }
 
     case SET_SPOTS: {
+      //loops through days array to find the correct day object and changes its spots
       const days = state.days.map(day => {
         if (day.name === action.dayName) {
           return {

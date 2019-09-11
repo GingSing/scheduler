@@ -4,8 +4,7 @@ import axios from "axios";
 import reducer, {
   SET_DAY,
   SET_APPLICATION_DATA,
-  SET_INTERVIEW,
-  SET_SPOTS
+  SET_INTERVIEW
 } from "reducers/application";
 
 //Shared socket to be reused
@@ -39,13 +38,6 @@ export default function useApplicationData() {
       );
   };
 
-  const dispatchSpots = value => {
-    dispatch({
-      type: SET_SPOTS,
-      value
-    });
-  };
-
   useEffect(() => {
     //Initiates socket before everything so socket can be set on completion of promise
     socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
@@ -64,25 +56,7 @@ export default function useApplicationData() {
         });
         socket.onmessage = data => {
           let { id, interview } = JSON.parse(data.data);
-          let newAppointment = {
-            ...appointments.data[id],
-            interview: { ...interview }
-          };
-
-          let newAppointments = {
-            ...appointments.data,
-            [id]: newAppointment
-          };
-          dispatch({ type: SET_INTERVIEW, appointments: newAppointments });
-          //Sets new appointment and then changes spots only if the interview object changes to null or from null to existing
-          if (
-            (appointments.data[id].interview && interview) ||
-            (!appointments.data[id].interview && !interview)
-          ) {
-            dispatchSpots(0);
-          } else {
-            dispatchSpots(interview ? -1 : 1);
-          }
+          dispatch({ type: SET_INTERVIEW, id, interview });
         };
       })
       .catch(err => err);

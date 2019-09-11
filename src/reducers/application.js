@@ -1,7 +1,6 @@
 export const SET_DAY = "SET_DAY";
 export const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 export const SET_INTERVIEW = "SET_INTERVIEW";
-export const SET_SPOTS = "SET_SPOTS";
 
 export default function reducer(state, action) {
   switch (action.type) {
@@ -19,25 +18,38 @@ export default function reducer(state, action) {
     }
 
     case SET_INTERVIEW: {
-      return { ...state, appointments: action.appointments };
-    }
+      let value;
+      if (
+        (state.appointments[action.id].interview &&
+          state.appointments[action.id].interview.length > 0 &&
+          action.interview) ||
+        (!state.appointments[action.id].interview && !action.interview)
+      ) {
+        value = 0;
+      } else {
+        value = action.interview ? -1 : 1;
+      }
 
-    case SET_SPOTS: {
-      //loops through days array to find the correct day object and changes its spots
       const days = state.days.map(day => {
         if (day.name === state.day) {
           return {
             ...day,
-            spots: day.spots + action.value
+            spots: day.spots + value
           };
         }
         return day;
       });
 
-      return {
-        ...state,
-        days
+      let newAppointment = {
+        ...state.appointments[action.id],
+        interview: { ...action.interview }
       };
+
+      let newAppointments = {
+        ...state.appointments,
+        [action.id]: newAppointment
+      };
+      return { ...state, appointments: newAppointments, days };
     }
 
     default:

@@ -6,7 +6,6 @@ import {
   fireEvent,
   getByText,
   getAllByTestId,
-  prettyDOM,
   getByAltText,
   getByPlaceholderText,
   queryByText,
@@ -52,7 +51,7 @@ describe("Application", () => {
     //Retrieve appointment by TestId
     const appointment = getAllByTestId(container, "appointment")[0];
     //Click Add button
-    fireEvent.click(getByAltText(container, "Add"));
+    fireEvent.click(getByAltText(appointment, "Add"));
     //Add Input Text Lydia Miller-Jones
     fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
       target: { value: "Lydia Miller-Jones" }
@@ -141,7 +140,7 @@ describe("Application", () => {
     //Get first appointment
     const appointment = getAllByTestId(container, "appointment")[0];
     //Add appointment
-    fireEvent.click(getByAltText(container, "Add"));
+    fireEvent.click(getByAltText(appointment, "Add"));
     //Input value Lydia Miller-Jones
     fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
       target: { value: "Lydia Miller-Jones" }

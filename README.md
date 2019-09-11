@@ -4,19 +4,21 @@ Interview Scheduler is an application that allows users to set up appointments w
 
 ## Final Product
 
-!["Screenshot of Application on load"]()
+!["Screenshot of Application on load"](https://raw.githubusercontent.com/GingSing/scheduler/master/public/docs/ApplicationOnLoad.png)
 
-!["Screenshot of Application on hover"]()
+!["Screenshot of Application on hover"](https://raw.githubusercontent.com/GingSing/scheduler/master/public/docs/ApplicationOnHover.png)
 
-!["Screenshot of Application creating appointment"]()
+!["Screenshot of Application creating appointment"](https://raw.githubusercontent.com/GingSing/scheduler/master/public/docs/ApplicationOnCreation.png)
 
-!["Screenshot of Application after save"]()
+!["Screenshot of Application on Saving"](https://raw.githubusercontent.com/GingSing/scheduler/master/public/docs/ApplicationOnSaving.png)
 
-!["Screenshot of Application on delete"]()
+!["Screenshot of Application after save"](https://raw.githubusercontent.com/GingSing/scheduler/master/public/docs/ApplicationOnSaved.png)
 
-!["Screenshot of Application on confirm"]()
+!["Screenshot of Application on confirm"](https://raw.githubusercontent.com/GingSing/scheduler/master/public/docs/ApplicationOnConfirm.png)
 
-!["Screenshot of Application on error"]()
+!["Screenshot of Application on deleting"](https://raw.githubusercontent.com/GingSing/scheduler/master/public/docs/ApplicationOnDeleting.png)
+
+!["Screenshot of Application on error"](https://raw.githubusercontent.com/GingSing/scheduler/master/public/docs/ApplicationOnError.png)
 
 ## Setup
 

@@ -1,55 +1,14 @@
 import { useReducer, useEffect } from "react";
 import axios from "axios";
 
-const SET_DAY = "SET_DAY";
-const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-const SET_INTERVIEW = "SET_INTERVIEW";
-const SET_SPOTS = "SET_SPOTS";
+import reducer, {
+  SET_DAY,
+  SET_APPLICATION_DATA,
+  SET_INTERVIEW,
+  SET_SPOTS
+} from "reducers/application";
 
 let socket;
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case SET_DAY: {
-      return { ...state, day: action.day };
-    }
-
-    case SET_APPLICATION_DATA: {
-      return {
-        ...state,
-        days: action.days,
-        appointments: action.appointments,
-        interviewers: action.interviewers
-      };
-    }
-
-    case SET_INTERVIEW: {
-      return { ...state, appointments: action.appointments };
-    }
-
-    case SET_SPOTS: {
-      const days = state.days.map(day => {
-        if (day.name === action.dayName) {
-          return {
-            ...day,
-            spots: day.spots + action.value
-          };
-        }
-        return day;
-      });
-
-      return {
-        ...state,
-        days
-      };
-    }
-
-    default:
-      throw new Error(
-        `Tried to reduce with unsupported action type: ${action.type}`
-      );
-  }
-};
 
 export default function useApplicationData() {
   const [state, dispatch] = useReducer(reducer, {
@@ -60,16 +19,23 @@ export default function useApplicationData() {
   });
   const setDay = day => dispatch({ type: SET_DAY, day });
   const bookInterview = (id, interview) => {
-    socket.send(JSON.stringify({ type: "SET_INTERVIEW", id, interview }));
-
-    return axios.put(`/api/appointments/${id}`, {
-      interview
-    });
+    return axios
+      .put(`/api/appointments/${id}`, {
+        interview
+      })
+      .then(() =>
+        socket.send(JSON.stringify({ type: "SET_INTERVIEW", id, interview }))
+      );
   };
 
   const cancelInterview = id => {
-    socket.send(JSON.stringify({ type: "SET_INTERVIEW", id, interview: null }));
-    return axios.delete(`/api/appointments/${id}`);
+    return axios
+      .delete(`/api/appointments/${id}`)
+      .then(() =>
+        socket.send(
+          JSON.stringify({ type: "SET_INTERVIEW", id, interview: null })
+        )
+      );
   };
 
   useEffect(() => {
@@ -99,11 +65,22 @@ export default function useApplicationData() {
             [id]: newAppointment
           };
           dispatch({ type: SET_INTERVIEW, appointments: newAppointments });
-          dispatch({
-            type: SET_SPOTS,
-            dayName: state.day,
-            value: interview ? -1 : 1
-          });
+          if (
+            (appointments.data[id].interview && interview) ||
+            (!appointments.data[id].interview && !interview)
+          ) {
+            dispatch({
+              type: SET_SPOTS,
+              dayName: state.day,
+              value: 0
+            });
+          } else {
+            dispatch({
+              type: SET_SPOTS,
+              dayName: state.day,
+              value: interview ? -1 : 1
+            });
+          }
         };
       })
       .catch(err => err);

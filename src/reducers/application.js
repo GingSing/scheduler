@@ -19,12 +19,9 @@ export default function reducer(state, action) {
 
     case SET_INTERVIEW: {
       let value;
-      if (
-        (state.appointments[action.id].interview &&
-          state.appointments[action.id].interview.length > 0 &&
-          action.interview) ||
-        (!state.appointments[action.id].interview && !action.interview)
-      ) {
+      const newInterview = action.interview;
+      const oldInterview = state.appointments[action.id].interview;
+      if (oldInterview && newInterview) {
         value = 0;
       } else {
         value = action.interview ? -1 : 1;

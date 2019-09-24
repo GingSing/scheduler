@@ -32,6 +32,8 @@ Screenshot of Application on Error
 
 Install dependencies with `npm install`.
 
+Make sure to have scheduler_api installed and running on a separate terminal, otherwise the application will not work properly.
+
 ## Running Webpack Development Server
 
 ```sh

@@ -18,15 +18,21 @@ export default function reducer(state, action) {
     }
 
     case SET_INTERVIEW: {
+      console.log(action.interview);
       let value;
       const newInterview = action.interview;
       const oldInterview = state.appointments[action.id].interview;
-      if (oldInterview && newInterview) {
+      console.log(oldInterview);
+      console.log(newInterview);
+      if (
+        oldInterview &&
+        newInterview &&
+        Object.keys(oldInterview).length > 0
+      ) {
         value = 0;
       } else {
         value = action.interview ? -1 : 1;
       }
-
       const days = state.days.map(day => {
         if (day.name === state.day) {
           return {
